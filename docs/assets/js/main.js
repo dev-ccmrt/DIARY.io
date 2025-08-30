@@ -1,37 +1,64 @@
-// ===== テーマ切替（ライト/ダーク） =====
+/* =========================================================
+   BLUE DIARY — main.js  （全機能版）
+   - テーマ切替（ライト/ダーク）
+   - タグフィルタ
+   - もっと見る
+   - ハンバーガーメニュー
+   ========================================================= */
+
+/* ===== テーマ切替（ライト/ダーク） ===== */
 (() => {
   const root = document.documentElement;
-  const btn = document.getElementById('themeToggle');
+  const btn  = document.getElementById('themeToggle');
   if (!btn) return;
+  const meta = document.getElementById('metaThemeColor');
 
-  const saved = localStorage.getItem('theme'); // 'light' | 'dark' | null
-  if (saved === 'light') {
-    root.classList.add('theme-light');
-    btn.setAttribute('aria-pressed', 'false');
-    btn.textContent = '🌙';
-  } else if (saved === 'dark') {
-    root.classList.add('theme-dark');
-    btn.setAttribute('aria-pressed', 'true');
-    btn.textContent = '☀️';
-  } else {
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    btn.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
-    btn.textContent = prefersDark ? '☀️' : '🌙';
+  const LIGHT_COLOR = '#f5f9ff'; // ライト時のブラウザUI色（パステルブルー）
+  const DARK_COLOR  = '#0b1220'; // ダーク時のブラウザUI色（群青）
+
+  function applyTheme(mode, { persist } = { persist: true }) {
+    if (mode === 'dark') {
+      root.classList.add('theme-dark');
+      root.classList.remove('theme-light');
+      btn.setAttribute('aria-pressed', 'true');
+      btn.textContent = '☀️';
+      if (meta) meta.setAttribute('content', DARK_COLOR);
+      if (persist) localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.add('theme-light');
+      root.classList.remove('theme-dark');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.textContent = '🌙';
+      if (meta) meta.setAttribute('content', LIGHT_COLOR);
+      if (persist) localStorage.setItem('theme', 'light');
+    }
   }
 
-  btn.addEventListener('click', () => {
-    const isDark = root.classList.toggle('theme-dark');
-    if (isDark) root.classList.remove('theme-light');
-    btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-    btn.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  // 初期状態：localStorage > OS設定
+  const saved = localStorage.getItem('theme'); // 'light' | 'dark' | null
+  if (saved === 'light')      applyTheme('light');
+  else if (saved === 'dark')  applyTheme('dark');
+  else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light', { persist: false });
+  }
 
-    const meta = document.getElementById('metaThemeColor');
-  if (meta) meta.setAttribute('content', isDark ? '#0b1220' : '#f5f9ff'); // ライトはパステルブルー
+  // クリックで明確に片側へ切替（トグル）
+  btn.addEventListener('click', () => {
+    const nowDark = root.classList.contains('theme-dark');
+    applyTheme(nowDark ? 'light' : 'dark');
   });
+
+  // 参考：ユーザーが保存していない場合のみ、OS設定の変化を追随
+  const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  if (!saved && mq) {
+    const handler = (e) => applyTheme(e.matches ? 'dark' : 'light', { persist: false });
+    if (mq.addEventListener) mq.addEventListener('change', handler);
+    else if (mq.addListener) mq.addListener(handler); // 古いブラウザ
+  }
 })();
 
-// ===== タグフィルタ（その場で絞り込み） =====
+/* ===== タグフィルタ（その場で絞り込み） ===== */
 (() => {
   const pillsWrap = document.getElementById('tagFilter');
   const list = document.getElementById('cardList');
@@ -68,17 +95,19 @@
     });
   });
 
+  // 初期状態は「全部」
   applyFilter('all');
-  window.__cardsForLoadMore = cards; // もっと見る用に公開
+  // もっと見る用に公開
+  window.__cardsForLoadMore = cards;
 })();
 
-// ===== もっと見る =====
+/* ===== もっと見る ===== */
 (() => {
   const list = document.getElementById('cardList');
-  const btn = document.getElementById('loadMore');
+  const btn  = document.getElementById('loadMore');
   if (!list || !btn) return;
 
-  const BATCH = 6; // 一度に出す枚数。必要なら調整
+  const BATCH = 6; // 一度に出す枚数
   const allCards = window.__cardsForLoadMore || Array.from(list.querySelectorAll('.card'));
 
   function initVisibility() {
@@ -114,7 +143,7 @@
   btn.addEventListener('click', revealNext);
 })();
 
-// ===== ハンバーガーメニュー（スマホ時） =====
+/* ===== ハンバーガーメニュー（スマホ時） ===== */
 (() => {
   const btn   = document.getElementById('menuToggle');
   const panel = document.getElementById('menuPanel');
@@ -140,7 +169,7 @@
     if (e.key === 'Escape') closeMenu();
   });
 
-  // PC幅に戻ったら状態を畳む
+  // PC幅に戻ったら畳む
   const mq = window.matchMedia('(min-width: 769px)');
   if (mq && typeof mq.addEventListener === 'function') {
     mq.addEventListener('change', closeMenu);
