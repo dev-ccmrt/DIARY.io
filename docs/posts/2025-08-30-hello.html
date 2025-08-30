@@ -9,6 +9,21 @@
       name="description"
       content="BLUE DIARY を最小構成で再構築。ハンバーガーメニュー・タグフィルタ・line-clamp の整理メモ。"
     />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var root = document.documentElement;
+          if (saved === "dark") root.classList.add("theme-dark");
+          else if (saved === "light") root.classList.add("theme-light");
+          else if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+          )
+            root.classList.add("theme-dark");
+        } catch (e) {}
+      })();
+    </script>
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
   <body>

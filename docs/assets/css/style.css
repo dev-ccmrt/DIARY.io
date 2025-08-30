@@ -187,3 +187,23 @@ footer{border-top:1px solid var(--border); margin-top:var(--space-lg)}
 .menu-panel.open{display:flex}
 @media (max-width:768px){ .nav-links{display:none} .menu-toggle{display:flex} }
 body.no-scroll{overflow:hidden}
+
+/* 追加：色の遷移をわずかに滑らかに */
+body,
+header,
+.card,
+.tag-pill,
+.readmore,
+.menu-panel,
+.about,
+footer,
+.navlink {
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+/* 動きを苦手とする人の設定を尊重 */
+@media (prefers-reduced-motion: reduce) {
+  body, header, .card, .tag-pill, .readmore, .menu-panel, .about, footer, .navlink {
+    transition: none;
+  }
+}

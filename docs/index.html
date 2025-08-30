@@ -6,6 +6,21 @@
     <meta name="theme-color" id="metaThemeColor" content="#0b1220" />
     <title>BLUE DIARY</title>
     <meta name="description" content="HTML/CSS/JSだけのシンプル日記サイト" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var root = document.documentElement;
+          if (saved === "dark") root.classList.add("theme-dark");
+          else if (saved === "light") root.classList.add("theme-light");
+          else if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+          )
+            root.classList.add("theme-dark");
+        } catch (e) {}
+      })();
+    </script>
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
