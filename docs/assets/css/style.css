@@ -1,5 +1,10 @@
 /* ===== カラーテーマ（Blue基調） ===== */
 :root{
+  /* ★ 追加: 背景の段階色（ダーク既定） */
+  --bg-1:#020617;   /* 最上段（最も暗い） */
+  --bg-2:#0b1220;   /* 中段 */
+  --bg-3:#101a33;   /* 最下段（やや明るい） */
+
   --bg:#0b1220; --surface:#0f172a; --card:#0b1220; --fg:#e6eefc; --muted:#9fb2d9;
   --accent:#3b82f6; --accent-ink:#001a4a; --border:#1e293b;
   --shadow:0 10px 30px rgba(0,0,0,.35);
@@ -8,10 +13,22 @@
   --font: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,
           "Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 }
-/* ライトテーマ（手動切替優先） */
+/* ライト（Pastel Blue） */
 html.theme-light{
-  --bg:#f6f8ff; --surface:#fff; --card:#fff; --fg:#0b1220; --muted:#4b5b84;
-  --accent:#2563eb; --accent-ink:#eaf1ff; --border:#dbe3ff;
+  --bg-1: #eaf4ff;   /* 最上段（淡い水色） */
+  --bg-2: #f5f9ff;   /* 中段 */
+  --bg-3: #ffffff;   /* 最下段 */
+  --bg:   var(--bg-2);
+
+  --surface:#ffffff; /* 面色（カード/パネルの地） */
+  --card:#fbfdff;    /* ほんのり青みの紙色 */
+  --fg:#0b1220;      /* 文字色（濃紺系） */
+  --muted:#5a6b8c;   /* 補助文字（青灰） */
+
+  --accent:#93c5fd;      /* パステルなアクセントブルー */
+  --accent-ink:#06203f;  /* アクセント上の文字は濃色で可読性確保 */
+
+  --border:#d7e6ff;  /* 淡い枠線 */
   --shadow:0 8px 22px rgba(21,30,60,.08);
 }
 /* OSのダーク設定を既定に反映（手動指定がなければ） */
@@ -23,9 +40,20 @@ html.theme-light{
 html,body{height:100%} *{box-sizing:border-box}
 body{
   margin:0;
-  background:linear-gradient(180deg,#071125 0%,#0b1220 40%,#0b1220 100%);
+  /* ★ 差し替え: まずは変数ベースの縦グラデ（フォールバック） */
+  background:linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 42%, var(--bg-3) 100%);
   color:var(--fg); font-family:var(--font); line-height:1.7; -webkit-font-smoothing:antialiased;
 }
+/* color-mix に対応しているブラウザでは “にじみ” を重ねてリッチに */
+@supports (background: color-mix(in oklab, white 10%, transparent)) {
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -200px,
+        color-mix(in oklab, var(--accent) 14%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 42%, var(--bg-3) 100%);
+  }
+}
+
 a{color:var(--accent); text-decoration:none}
 a:hover{text-decoration:underline}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--space)}
@@ -35,7 +63,10 @@ a:hover{text-decoration:underline}
 header{
   position:sticky; top:0; z-index:10;
   backdrop-filter:saturate(180%) blur(10px);
-  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  /* ★ 追加: 非対応ブラウザ用の素の背景 → 色が乗る */
+  background: var(--bg);
+  /* ★ 上書き: color-mix 対応なら薄めた帯にしてガラス感 */
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
   border-bottom:1px solid var(--border);
 }
 .nav{display:flex; align-items:center; gap:var(--space); height:62px}

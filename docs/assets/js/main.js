@@ -25,6 +25,9 @@
     btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
     btn.textContent = isDark ? '☀️' : '🌙';
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+    const meta = document.getElementById('metaThemeColor');
+  if (meta) meta.setAttribute('content', isDark ? '#0b1220' : '#f5f9ff'); // ライトはパステルブルー
   });
 })();
 
