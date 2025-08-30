@@ -1,0 +1,158 @@
+/* ===== カラーテーマ（Blue基調） ===== */
+:root{
+  --bg:#0b1220; --surface:#0f172a; --card:#0b1220; --fg:#e6eefc; --muted:#9fb2d9;
+  --accent:#3b82f6; --accent-ink:#001a4a; --border:#1e293b;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:16px; --space:16px; --space-sm:8px; --space-lg:28px;
+  --maxw:1080px;
+  --font: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+          "Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+}
+/* ライトテーマ（手動切替優先） */
+html.theme-light{
+  --bg:#f6f8ff; --surface:#fff; --card:#fff; --fg:#0b1220; --muted:#4b5b84;
+  --accent:#2563eb; --accent-ink:#eaf1ff; --border:#dbe3ff;
+  --shadow:0 8px 22px rgba(21,30,60,.08);
+}
+/* OSのダーク設定を既定に反映（手動指定がなければ） */
+@media (prefers-color-scheme: dark){
+  html:not(.theme-light):not(.theme-dark){ color-scheme: dark; }
+}
+
+/* ===== ベース ===== */
+html,body{height:100%} *{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#071125 0%,#0b1220 40%,#0b1220 100%);
+  color:var(--fg); font-family:var(--font); line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--space)}
+.small{font-size:.92rem; color:var(--muted)}
+
+/* ===== ヘッダー ===== */
+header{
+  position:sticky; top:0; z-index:10;
+  backdrop-filter:saturate(180%) blur(10px);
+  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  border-bottom:1px solid var(--border);
+}
+.nav{display:flex; align-items:center; gap:var(--space); height:62px}
+.brand{
+  font-weight:800; letter-spacing:.02em;
+  background:linear-gradient(90deg,#60a5fa,#22d3ee);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.navlink{padding:.45rem .7rem; border-radius:12px; color:var(--fg)}
+.navlink[aria-current="page"]{
+  background: color-mix(in oklab, var(--accent) 18%, transparent);
+  text-decoration:none;
+}
+.spacer{flex:1}
+
+/* テーマボタン */
+#themeToggle{
+  border:1px solid var(--border); background:var(--surface); color:var(--fg);
+  padding:.4rem .7rem; border-radius:9999px; cursor:pointer;
+  box-shadow:var(--shadow); transition:transform .08s ease;
+}
+#themeToggle:active{transform:scale(.97)}
+#themeToggle:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ===== 見出しセクション ===== */
+.page-head{padding:clamp(18px,4vw,36px) 0 var(--space)}
+.page-head h1{margin:0 0 var(--space-sm); font-size:clamp(22px,4vw,34px); letter-spacing:.01em}
+
+/* ===== タグフィルタ ===== */
+#tagFilter{display:flex; flex-wrap:wrap; gap:10px; margin:var(--space) 0 var(--space-lg)}
+.tag-pill{
+  border:1px solid var(--border); background:var(--surface); color:var(--fg);
+  padding:.38rem .8rem; border-radius:9999px; cursor:pointer; user-select:none;
+  box-shadow:0 2px 0 rgba(0,0,0,.15);
+}
+.tag-pill.is-active{
+  background:var(--accent); color:var(--accent-ink);
+  border-color:transparent; box-shadow:0 4px 14px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+.tag-pill:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ===== カードグリッド ===== */
+#cardList{display:grid; grid-template-columns:1fr; gap:var(--space)}
+@media (min-width:640px){#cardList{grid-template-columns:1fr 1fr}}
+@media (min-width:980px){#cardList{grid-template-columns:1fr 1fr 1fr}}
+
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column;
+  transition:transform .08s ease, box-shadow .15s ease;
+}
+.card:hover{transform:translateY(-2px); box-shadow:0 16px 40px rgba(0,30,80,.25)}
+
+.thumb{display:block}
+.thumb img{
+  width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; display:block; background:#0b1220;
+}
+
+.card__body{padding:var(--space); display:flex; flex-direction:column; gap:12px}
+.meta{font-size:.9rem; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.title{margin:0; font-size:clamp(16px,2.2vw,20px); line-height:1.4}
+.title a{color:var(--fg); text-decoration:none}
+.title a:hover{text-decoration:underline}
+
+.excerpt{
+  margin:0; color:var(--muted);
+  /* 多行省略（WebKit互換＋標準） */
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:4;
+  line-clamp:4;  /* 標準（将来対応） */
+  overflow:hidden; position:relative;
+}
+/* 見た目の「…」を重ねる（短文でも付くのが嫌なら削除可） */
+.excerpt::after{
+  content:"…"; position:absolute; right:8px; bottom:4px;
+  background:var(--surface); padding-left:4px;
+}
+
+.tags{display:flex; gap:8px; flex-wrap:wrap}
+.tag{font-size:.78rem; padding:.18rem .55rem; border-radius:9999px; border:1px solid var(--border); color:var(--muted)}
+
+.readmore{
+  align-self:flex-start; padding:.48rem .8rem; border-radius:12px;
+  border:1px solid var(--border); background:transparent; color:var(--fg);
+}
+.readmore:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.is-hidden{display:none !important}
+.fade-in{animation:fade .25s ease-out}
+@keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+/* ===== もっと見る ===== */
+.actions{display:flex; justify-content:center; margin:var(--space-lg) 0}
+#loadMore{
+  border:1px solid var(--border); background:var(--surface); color:var(--fg);
+  padding:.65rem 1.1rem; border-radius:9999px; cursor:pointer; box-shadow:var(--shadow);
+  transition:transform .08s ease;
+}
+#loadMore:active{transform:scale(.98)}
+#loadMore:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ===== About / フッター ===== */
+.about{margin-top:calc(var(--space-lg) + 8px); padding:var(--space-lg) var(--space);
+  background: color-mix(in oklab, var(--accent) 6%, transparent);
+  border:1px solid var(--border); border-radius:var(--radius);
+}
+.about h2{margin-top:0}
+footer{border-top:1px solid var(--border); margin-top:var(--space-lg)}
+.foot{padding:var(--space); color:var(--muted); display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between}
+
+/* ===== ハンバーガー ===== */
+.menu-toggle{
+  display:none; flex-direction:column; justify-content:center; align-items:center;
+  width:42px; height:42px; border:1px solid var(--border);
+  background:var(--surface); border-radius:8px; cursor:pointer; box-shadow:var(--shadow);
+}
+.menu-toggle .bar{width:20px; height:2px; background:var(--fg); margin:3px 0; border-radius:2px}
+.menu-panel{display:none; flex-direction:column; background:var(--surface); border-bottom:1px solid var(--border); padding:10px}
+.menu-panel.open{display:flex}
+@media (max-width:768px){ .nav-links{display:none} .menu-toggle{display:flex} }
+body.no-scroll{overflow:hidden}

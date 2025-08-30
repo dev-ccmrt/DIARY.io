@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="auto">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>学習メモ：サイト再構築とハンバーガー導入 | BLUE DIARY</title>
+    <meta
+      name="description"
+      content="BLUE DIARY を最小構成で再構築。ハンバーガーメニュー・タグフィルタ・line-clamp の整理メモ。"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <!-- ヘッダー（共通） -->
+    <header>
+      <nav class="wrap nav" aria-label="メイン">
+        <a class="brand" href="../">BLUE DIARY</a>
+
+        <div class="nav-links">
+          <a class="navlink" href="../">日記</a>
+          <a class="navlink" href="../#tags">タグ</a>
+          <a class="navlink" href="../#about">About</a>
+        </div>
+
+        <div class="spacer"></div>
+
+        <button
+          id="themeToggle"
+          type="button"
+          aria-pressed="false"
+          title="テーマ切り替え"
+        >
+          🌙
+        </button>
+
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          aria-controls="menuPanel"
+          aria-expanded="false"
+          aria-label="メニューを開閉"
+        >
+          <span class="bar"></span><span class="bar"></span
+          ><span class="bar"></span>
+        </button>
+      </nav>
+
+      <div class="menu-panel" id="menuPanel">
+        <a class="navlink" href="../">日記</a>
+        <a class="navlink" href="../#tags">タグ</a>
+        <a class="navlink" href="../#about">About</a>
+      </div>
+    </header>
+
+    <!-- 本文 -->
+    <main class="wrap page-head">
+      <h1>学習メモ：サイト再構築とハンバーガー導入</h1>
+      <p class="small">
+        <time datetime="2025-08-30">2025-08-30</time> ・ 学習 / 生活
+      </p>
+
+      <h2>今日の結論</h2>
+      <p>
+        迷いを断ち切って
+        <strong>最小構成（index.html / posts / assets）</strong> に再構築。
+        スマホはハンバーガー、カード一覧はタグ絞り込み・もっと見るで運用開始。
+        画像は任意（気が向いたら載せる方針）。
+      </p>
+
+      <h2>ディレクトリと役割（再確認）</h2>
+      <pre class="small"><code>/
+├─ index.html          … カード一覧（レビュー）
+├─ posts/              … 記事本体（1記事=1HTML）
+│  └─ 2025-08-30-hello.html &lt;= これ
+└─ assets/
+   ├─ css/style.css
+   ├─ js/main.js
+   └─ img/             … 写真は任意でここ
+</code></pre>
+
+      <h2>実装メモ</h2>
+      <ul>
+        <li>
+          <strong>ハンバーガー</strong>：768px以下でPCナビを隠し、トグルで
+          <code>#menuPanel</code> を開閉。<code>aria-expanded</code>
+          を更新、<code>ESC</code> で閉じる。
+        </li>
+        <li>
+          <strong>タグ絞り込み</strong>：カードの
+          <code>data-tags</code> を参照。<code>#tagFilter</code>
+          のボタンを押すと該当以外を <code>.is-hidden</code>。
+        </li>
+        <li>
+          <strong>もっと見る</strong
+          >：初期表示はバッチ（既定6）。ボタンで次の6枚を順に出す。
+        </li>
+        <li>
+          <strong>複数行省略</strong>：<code>-webkit-line-clamp</code> に加えて
+          <code>line-clamp</code> も併記（将来互換）。見た目の「…」は疑似要素。
+        </li>
+        <li>
+          <strong>テーマ切替</strong>：localStorage の
+          <code>theme</code> を参照／更新。OS設定は手動指定がない時のみ採用。
+        </li>
+      </ul>
+
+      <h2>今日の学び（原理）</h2>
+      <ol>
+        <li>
+          「まず構造」— 表層よりも
+          <em>情報の配置と責務分離</em
+          >（一覧＝index、本文＝posts、共通資産＝assets）。
+        </li>
+        <li>
+          モバイルナビは
+          <em>表示切替＋状態管理＋アクセシビリティ</em> の3点セットで完結する。
+        </li>
+        <li>
+          CSSの行数制御は仕様的に省略記号を持たない。<em>見た目の「…」は別途演出</em>として扱うのが筋。
+        </li>
+      </ol>
+
+      <h2>次やること（TODO）</h2>
+      <ul>
+        <li>
+          カードを2〜3枚追加して運用フローを固める（<code>posts/</code>
+          に新規HTML、<code>index.html</code> にカード追加）。
+        </li>
+        <li>不要になったサンプル記事・リンクの掃除。</li>
+        <li>
+          必要になったら
+          <code>assets/img/</code>
+          を月別に切る（例：<code>assets/img/2025-09/</code>）。
+        </li>
+      </ul>
+
+      <p><a class="readmore" href="../">← 一覧へ戻る</a></p>
+    </main>
+
+    <footer>
+      <div class="foot wrap small">© BLUE DIARY</div>
+    </footer>
+
+    <script src="../assets/js/main.js" defer></script>
+  </body>
+</html>

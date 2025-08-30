@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="auto">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>BLUE DIARY</title>
+    <meta name="description" content="HTML/CSS/JSだけのシンプル日記サイト" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <!-- ヘッダー -->
+    <header>
+      <nav class="wrap nav" aria-label="メイン">
+        <a class="brand" href="./" aria-current="page">BLUE DIARY</a>
+
+        <!-- PC用リンク（モバイルではCSSで非表示） -->
+        <div class="nav-links">
+          <a class="navlink" href="./">日記</a>
+          <a class="navlink" href="#tags">タグ</a>
+          <a class="navlink" href="#about">About</a>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- テーマ切替 -->
+        <button
+          id="themeToggle"
+          type="button"
+          aria-pressed="false"
+          title="テーマ切り替え(ﾗｲﾄ/ﾀﾞｰｸ)"
+        >
+          🌙
+        </button>
+
+        <!-- モバイル用ハンバーガー -->
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          aria-controls="menuPanel"
+          aria-expanded="false"
+          aria-label="メニューを開閉"
+        >
+          <span class="bar"></span><span class="bar"></span
+          ><span class="bar"></span>
+        </button>
+      </nav>
+
+      <!-- ハンバーガー展開パネル（モバイル表示時） -->
+      <div class="menu-panel" id="menuPanel">
+        <a class="navlink" href="./">日記</a>
+        <a class="navlink" href="#tags">タグ</a>
+        <a class="navlink" href="#about">About</a>
+      </div>
+    </header>
+
+    <!-- メイン -->
+    <main>
+      <!-- 見出し＋タグフィルタ -->
+      <section class="page-head wrap" id="tags">
+        <h1>新着日記</h1>
+        <div id="tagFilter" role="tablist" aria-label="タグ">
+          <button
+            class="tag-pill is-active"
+            data-tag="all"
+            aria-selected="true"
+          >
+            全部
+          </button>
+          <button class="tag-pill" data-tag="学習">学習</button>
+          <button class="tag-pill" data-tag="生活">生活</button>
+        </div>
+      </section>
+
+      <!-- カード一覧（サムネ無しでも成立） -->
+      <section id="cardList" class="wrap">
+        <!-- カード1（サムネは任意。使うなら下のthumbブロックを有効化） -->
+        <article class="card" data-tags="学習 生活">
+          <!--
+        <a class="thumb" href="posts/2025-08-30-hello.html">
+          <img src="assets/img/20250830.jpg" alt="サムネ">
+        </a>
+        -->
+          <div class="card__body">
+            <div class="meta">
+              <time datetime="2025-08-30">2025-08-30</time><span>・</span
+              ><span>3分</span>
+              <div class="tags">
+                <span class="tag">学習</span><span class="tag">生活</span>
+              </div>
+            </div>
+            <h2 class="title">
+              <a href="posts/2025-08-30-hello.html"
+                >学習メモ：ハンバーガー導入</a
+              >
+            </h2>
+            <p class="excerpt">
+              ヘッダーをハンバーガー化。768px以下でnavを隠し、トグルで下に展開…
+            </p>
+            <a class="readmore" href="posts/2025-08-30-hello.html"
+              >続きを読む</a
+            >
+          </div>
+        </article>
+
+        <!-- 以降、同じ <article class="card">…</article> をコピペで増やす -->
+      </section>
+
+      <!-- もっと見る（任意。カードが増えたら自動で効く） -->
+      <div class="actions"><button id="loadMore">もっと見る</button></div>
+
+      <!-- About -->
+      <section class="about wrap" id="about">
+        <h2>About</h2>
+        <p class="small">BLUE DIARY は HTML/CSS/JS だけのシンプル日記。</p>
+      </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+      <div class="foot wrap small">© BLUE DIARY</div>
+    </footer>
+
+    <!-- スクリプト -->
+    <script src="assets/js/main.js" defer></script>
+  </body>
+</html>
